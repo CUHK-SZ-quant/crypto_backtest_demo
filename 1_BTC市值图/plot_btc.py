@@ -1,6 +1,9 @@
+# -*- encoding: utf-8 -*-
 '''
-10年千倍的比特币，一路走来超越了哪些资产，还有哪些未超越？画图代码
-https://mp.weixin.qq.com/s/25pZajpcmzwF9U-WjfBWfA
+@Description: 
+@Date: 2022/09/20 17:42:46
+@Author: Yang Boyu
+@version: 1.0
 '''
 
 # 可通过 pip install pyecharts 指令下载相应库
@@ -17,10 +20,8 @@ pd.set_option('display.max_rows', 100) # 显示的最大行数（避免只显示
 pd.set_option('display.max_columns', 100) # 显示的最大列数（避免列显示不全）
 # pd.set_option('display.float_format', lambda x: '%.3f' % x)    # 取消Pandas 科学计数法显示 + 可调节位数
 
-DATA_PATH = r'E:\BradleyStrats\BasicCrypto\src\2_plot_mv\data'
-SAVE_PATH = r'E:\BradleyStrats\BasicCrypto\src\2_plot_mv\results'
 
-df = pd.read_csv(os.path.join(DATA_PATH, "BTC市值.csv"), encoding='gbk')
+df = pd.read_csv("btc_mv.csv", encoding='gbk')
 print(df.head(20))
 x_data = df['交易日期']
 y_data = df['总市值（亿美元）']
@@ -45,5 +46,9 @@ y_data = df['总市值（亿美元）']
         is_symbol_show=True,
         label_opts=opts.LabelOpts(is_show=False),
     )
-    .render(os.path.join(SAVE_PATH, "basic_line_chart.html"))
+    .render("btc_mv_plot.html")
 )
+
+
+
+    
