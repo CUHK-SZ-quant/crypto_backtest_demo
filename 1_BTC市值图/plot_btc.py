@@ -1,50 +1,48 @@
 # -*- encoding: utf-8 -*-
 '''
-@Description: Plot MV of BTC
+@Description: Plot BTC market value
 @Author: Yang Boyu
 @Email: bradleyboyuyang@gmail.com
-@File: plot_btc.py
 @Date: 2022/09/20 17:47:06
 @version: 1.0
 '''
 
-# 可通过 pip install pyecharts 指令下载相应库
-import pyecharts.options as opts
 import pandas as pd
 from pyecharts.charts import Line
+import pyecharts.options as opts
 
 pd.set_option('display.unicode.ambiguous_as_wide', True)
 pd.set_option('display.unicode.east_asian_width', True)
-pd.set_option('display.width', 180) # 每一行的宽度（避免换行）
+pd.set_option('display.width', 180) 
 
-
-df = pd.read_csv("btc_mv.csv", encoding='gbk')
+df = pd.read_csv("btc_mv.csv")
 print(df.head(20))
-x_data = df['交易日期']
-y_data = df['总市值（亿美元）']
 
-# pyecharts画折线图
-(
-    Line()
-    .set_global_opts(
-        tooltip_opts=opts.TooltipOpts(is_show=False),
-        xaxis_opts=opts.AxisOpts(type_="category"),
-        yaxis_opts=opts.AxisOpts(
-            type_="value",
-            axistick_opts=opts.AxisTickOpts(is_show=True),
-            splitline_opts=opts.SplitLineOpts(is_show=True),
-        ),
-    )
-    .add_xaxis(xaxis_data=x_data)
-    .add_yaxis(
-        series_name="",
-        y_axis=y_data,
-        symbol="emptyCircle",
-        is_symbol_show=True,
-        label_opts=opts.LabelOpts(is_show=False),
-    )
-    .render("btc_mv_plot.html")
+# 市值的单位是亿美元
+x_data = df['datetime'].tolist()
+y_data = df['mv'].round(1).tolist()
+
+# 绘制折线图
+line = Line()
+line.add_xaxis(xaxis_data=x_data)
+line.add_yaxis(
+    series_name="BTC/USDT",       
+    y_axis=y_data,  
+    symbol="emptyCircle",
+    is_symbol_show=True,
+    areastyle_opts=opts.AreaStyleOpts(opacity=0.5, color='#00FFFF'),  # 设置图形透明度与填充颜色
+    label_opts=opts.LabelOpts(is_show=False),   # 标签配置项
+    markpoint_opts=opts.MarkPointOpts(         # 标记点配置项
+        data=[
+                opts.MarkPointItem(type_="max", name="max"),
+                opts.MarkPointItem(type_="average", name="avg")
+        ]
+    ),
+    markline_opts=opts.MarkLineOpts(           # 标记线配置项
+        data=[opts.MarkLineItem(type_="average", name="avg")])
 )
+line.set_global_opts(
+    title_opts=opts.TitleOpts(title='Bitcoin Market Value (2013-2021)')
+)
+line.render("btc_mv_plot.html") 
 
-
-    
