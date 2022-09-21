@@ -10,16 +10,15 @@ pd.set_option('display.unicode.east_asian_width', True)
 pd.set_option('display.width', 180)
 pd.set_option('display.float_format', lambda x: '%.3f' % x)  
 
+# 参数设置
 static_amount = 100
 start_date = '2013-12-04'
 end_date = '2015-12-31'
-start_date = '2006-12-04'
-end_date = '2022-12-31'
+
 df = pd.read_csv('./data/BTCUSD_1D.csv')
 
 df = df[['candle_begin_time', 'close']]
-df = df[(df['candle_begin_time'] >= start_date)
-        & (df['candle_begin_time'] <= end_date)]
+df = df[(df['candle_begin_time'] >= start_date) & (df['candle_begin_time'] <= end_date)]
 df['candle_begin_time'] = pd.to_datetime(df['candle_begin_time'])
 df.set_index('candle_begin_time', inplace=True)
 

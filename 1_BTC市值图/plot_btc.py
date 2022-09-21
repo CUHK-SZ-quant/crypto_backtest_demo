@@ -40,4 +40,3 @@ line.set_global_opts(
     title_opts=opts.TitleOpts(title='Bitcoin Market Value (2013-2021)')
 )
 line.render("btc_mv_plot.html") 
-
