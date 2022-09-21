@@ -1,12 +1,7 @@
-# -*- encoding: utf-8 -*-
 '''
-@Description: Plot BTC market value
-@Author: Yang Boyu
-@Email: bradleyboyuyang@gmail.com
-@Date: 2022/09/20 17:47:06
-@version: 1.0
-'''
+BTC市值走势绘制
 
+'''
 import pandas as pd
 from pyecharts.charts import Line
 import pyecharts.options as opts
