@@ -77,8 +77,7 @@ plt.plot(df['candle_end_time'], df['strategy_net'], label='strategy', color='mag
 plt.plot(df['candle_end_time'], df['coin1_net'], label='crypto1_net', color='cyan')
 plt.plot(df['candle_end_time'], df['coin2_net'], label='crypto2_net', color='b')
 plt.legend(loc=0)
-plt.grid(True)
-plt.savefig("./images/rotation_v1.png", dpi=500)
+plt.savefig("./images/rotation_v1.png", dpi=400)
 
 # 保存文件
 print(df.tail(50))
