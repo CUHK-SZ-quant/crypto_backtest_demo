@@ -1,10 +1,10 @@
 '''
-定投v1收益回测
-额外说明详见README.md
-
+@Description: 双币轮动_v1收益回测，不考虑空仓
+@Author: Yang Boyu
+@Email: bradleyboyuyang@gmail.com
 '''
-import pandas as pd
 
+import pandas as pd
 pd.set_option('display.unicode.ambiguous_as_wide', True)
 pd.set_option('display.unicode.east_asian_width', True)
 pd.set_option('display.width', 180)

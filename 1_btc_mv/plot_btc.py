@@ -1,7 +1,9 @@
 '''
-BTC市值走势绘制
-
+@Description: BTC市值走势绘制
+@Author: Yang Boyu
+@Email: bradleyboyuyang@gmail.com
 '''
+
 import pandas as pd
 from pyecharts.charts import Line
 import pyecharts.options as opts

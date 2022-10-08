@@ -1,2 +1,9 @@
-# CryptoLecture
- 2022年香港中文大学（深圳）量化投资与交易协会公开讲座资料：区块链基础与加密货币交易
+# QTIA-Crypto-Lecture
+Public lecture materials introducing basic blockchain and cryptocurrency trading strategies at CUHK-Shenzhen in 2022.
+
+### BTC Market Value
+<img src="./1_btc_mv/btc_mv_plot.png" width="650">
+
+
+### Rotation Trading
+<img src="./3_rotation/images/rotation_v1.png" width="650">
