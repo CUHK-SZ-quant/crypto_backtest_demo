@@ -1,5 +1,5 @@
 '''
-@Description: 双币轮动_v1收益回测，维持满仓
+@Description: 双币轮动_v2收益回测，加入空仓条件
 @Author: Yang Boyu
 @Email: bradleyboyuyang@gmail.com
 '''
@@ -10,6 +10,10 @@ from Config import *
 # 读取数据
 df_coin1 = pd.read_csv(f'./data/{symbol1}-{freq}.csv', encoding='gbk', parse_dates=['candle_end_time'])
 df_coin2 = pd.read_csv(f'./data/{symbol2}-{freq}.csv', encoding='gbk', parse_dates=['candle_end_time'])
+
+# 设置参数
+trade_rate = 2.5 / 1000  # 千分之2.5的交易费用远高于市场平均水平
+momentum_days = 20  # 计算多少天的涨跌幅
 
 # 计算两种币每天的涨跌幅pct
 df_coin1['coin1_pct'] = df_coin1['close'].pct_change(1)
@@ -27,9 +31,10 @@ df['coin2_mom'] = df['coin2_close'].pct_change(periods=momentum_days)
 # 轮动条件
 df.loc[df['coin1_mom'] > df['coin2_mom'], 'style'] = 'coin1'
 df.loc[df['coin1_mom'] < df['coin2_mom'], 'style'] = 'coin2'
-# 相等时维持原来的仓位
+df.loc[(df['coin1_mom'] < 0) & (df['coin2_mom'] < 0), 'style'] = 'empty'
+# 相等时维持原来的仓位。
 df['style'].fillna(method='ffill', inplace=True)
-# 收盘才能确定风格，实际的持仓pos要晚一天
+# 收盘才能确定风格，实际的持仓pos要晚一天。
 df['pos'] = df['style'].shift(1)
 # 删除持仓为nan的天数
 df.dropna(subset=['pos'], inplace=True)
@@ -38,6 +43,7 @@ df = df[df['candle_end_time'] >= pd.to_datetime('20170101')]
 # 计算策略的整体涨跌幅strategy_pct
 df.loc[df['pos'] == 'coin1', 'strategy_pct'] = df['coin1_pct']
 df.loc[df['pos'] == 'coin2', 'strategy_pct'] = df['coin2_pct']
+df.loc[df['pos'] == 'empty', 'strategy_pct'] = 0
 
 # 调仓时间
 df.loc[df['pos'] != df['pos'].shift(1), 'trade_time'] = df['candle_end_time']
@@ -48,8 +54,10 @@ df.loc[(df['trade_time'].notnull()) & (df['pos'] == 'coin2'), 'strategy_pct_adju
         df['coin2_open'] * (1 + trade_rate)) - 1
 df.loc[df['trade_time'].isnull(), 'strategy_pct_adjust'] = df['strategy_pct']
 # 扣除卖出手续费
-df.loc[(df['trade_time'].shift(-1).notnull()), 'strategy_pct_adjust'] = (1 + df[
+df.loc[(df['trade_time'].shift(-1).notnull()) & (df['pos'] != 'empty'), 'strategy_pct_adjust'] = (1 + df[
     'strategy_pct']) * (1 - trade_rate) - 1
+# 空仓的日子，涨跌幅用0填充
+df['strategy_pct_adjust'].fillna(value=0.0, inplace=True)
 del df['strategy_pct'], df['style']
 
 df.reset_index(drop=True, inplace=True)
@@ -58,17 +66,17 @@ df['coin1_net'] = df['coin1_close'] / df['coin1_close'][0]
 df['coin2_net'] = df['coin2_close'] / df['coin2_close'][0]
 df['strategy_net'] = (1 + df['strategy_pct_adjust']).cumprod()
 
-# 绘制图形
+# 绘制图片
 plt.figure(figsize=(10, 7), facecolor='white')
 plt.plot(df['candle_end_time'], df['strategy_net'], label='strategy', color='magenta')
-plt.plot(df['candle_end_time'], df['coin1_net'], label='crypto1_net', color='cyan')
-plt.plot(df['candle_end_time'], df['coin2_net'], label='crypto2_net', color='b')
+plt.plot(df['candle_end_time'], df['coin1_net'], label='coin1_net', color='cyan')
+plt.plot(df['candle_end_time'], df['coin2_net'], label='coin2_net', color='b')
 plt.legend(loc=0)
-plt.savefig("./images/rotation_v1.png", dpi=400)
+plt.savefig("./images/rotation_v2.png", dpi=400)
 
 # 保存文件
 print(df.tail(50))
-df.to_csv('./results/rotation_v1.csv', encoding='gbk', index=False)
+df.to_csv('./results/rotation_v2.csv', encoding='gbk', index=False)
 
 # 评估策略的好坏
 res = evaluate_investment(df, 'strategy_net', time='candle_end_time')

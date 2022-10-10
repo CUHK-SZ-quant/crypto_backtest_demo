@@ -1,3 +1,9 @@
+'''
+@Description: 策略评价函数
+@Author: Yang Boyu
+@Email: bradleyboyuyang@gmail.com
+'''
+
 import pandas as pd
 import numpy as np
 

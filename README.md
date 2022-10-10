@@ -6,4 +6,4 @@
 <img src="./1_btc_mv/btc_mv_plot.png" width="800">
 
 
-<img src="./3_rotation_trading/images/rotation_v1.png" width="720">
+<img src="./3_rotation_trading/images/comparison.png" width="720">
