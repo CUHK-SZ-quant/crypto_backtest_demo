@@ -1,5 +1,5 @@
 '''
-@Description: 双币轮动_v1收益回测，不考虑空仓
+@Description: 简单定投收益回测
 @Author: Yang Boyu
 @Email: bradleyboyuyang@gmail.com
 '''
