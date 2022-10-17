@@ -6,7 +6,6 @@
 - `1_btc_mv`：BTC市值走势（亿美元）
 - `2_fixed_trading`：定投策略回测
 - `3_rotation_trading`：轮动交易策略回测
-- `4_timing_trading`：通道突破择时策略回测
 
 ### 部分结果 
 <div align=center>
